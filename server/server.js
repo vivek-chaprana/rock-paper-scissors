@@ -42,7 +42,7 @@ io.on("connection", socket => {
 
     socket.on("join-room", roomId => {
         if(!rooms[roomId]){
-            const error = "This room doen't exist";
+            const error = "This room doesn't exist";
             socket.emit("display-error", error);
             console.log("Room joined failed");
             

@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+@font-face {
+  font-family: 'Anurati Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Anurati Regular'), url('Anurati-Regular.woff') format('woff');
+  }

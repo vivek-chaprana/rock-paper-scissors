@@ -1,4 +1,71 @@
-.connected{
-    color: green;
-    background-color: red;
+.connected {
+  min-width: 5px;
+  background-color: red;
+}
+.main-heading {
+  font-family: "Anurati Regular";
+  /* text-transform: uppercase; */
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  75% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.wait-status p {
+  animation: blink 1s linear infinite;
+}
+
+#rock:hover div {
+  border: 2px solid #ff85ff !important;
+}
+#rock:hover p {
+  color: #ff85ff !important;
+}
+#scissors:hover div {
+  border: 2px solid #40dcff !important;
+}
+#scissors:hover p {
+  color: #40dcff !important;
+}
+#paper:hover div {
+  border: 2px solid #fced19 !important;
+}
+#paper:hover p {
+  color: #fced19 !important;
+}
+.not-active {
+  opacity: 0.5;
+}
+
+.active-rock div {
+  border: 2px solid #ff85ff !important;
+}
+.active-paper div {
+  border: 2px solid #fced19 !important;
+}
+.active-scissor div {
+  border: 2px solid #40dcff !important;
+}
+.active-rock p {
+  color: #ff85ff;
+}
+.active-paper p {
+  color: #fced19;
+}
+.active-scissor p {
+  color: #40dcff;
 }
