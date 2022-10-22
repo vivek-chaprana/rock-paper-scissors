@@ -14,7 +14,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors : {
-        origin : "http://localhost:3000",
+        origin : "http://localhost:3000", 
     }
 })
 
@@ -89,7 +89,10 @@ io.on("connection", socket => {
         }
     });
 
-    socket.on("make-move", ({playerId, myChoice, roomId}) => {
+    socket.on("make-move", (obj) => {
+        let roomId = obj.roomId;
+        let playerId = obj.playerId;
+        let myChoice = obj.ch === 1 ? "rock" : obj.ch === 2 ? "paper" : "scissor"
         makeMove(roomId, playerId, myChoice);
 
         if(choices[roomId][0] !== "" && choices[roomId][1] !== ""){
@@ -101,25 +104,42 @@ io.on("connection", socket => {
                 io.to(roomId).emit("draw", message);
                 
             }else if(moves[playerOneChoice] === playerTwoChoice){
-                let enemyChoice = "";
+                console.log("p1 jeet raha hai");
 
-                if(playerId === 1){
-                    enemyChoice = playerTwoChoice;
-                }else{
-                    enemyChoice = playerOneChoice;
-                }
+                console.log(playerId);
+                
+                const choiceObj = {playerOneChoice,playerTwoChoice};
 
-                io.to(roomId).emit("player-1-wins", {myChoice, enemyChoice});
+                // if(playerId === 1){
+                //     enemyChoice = playerTwoChoice;
+                // }else{
+                //     enemyChoice = playerOneChoice;
+                // }
+                // console.log("My , Enemy :" + myChoice + enemyChoice);
+                console.log(choiceObj);
+                
+
+                io.to(roomId).emit("player-1-wins", choiceObj);
             }else{
-                let enemyChoice = "";
+                console.log("p2 jeet raha hai");
+                console.log(playerId);
+                const choiceObj = {playerOneChoice,playerTwoChoice};
+                console.log(choiceObj);
 
-                if(playerId === 1){
-                    enemyChoice = playerTwoChoice;
-                }else{
-                    enemyChoice = playerOneChoice;
-                }
 
-                io.to(roomId).emit("player-2-wins", {myChoice, enemyChoice});
+                
+                
+                // let enemyChoice = "";
+
+                // if(playerId === 1){
+                //     enemyChoice = playerTwoChoice;
+                // }else{
+                //     enemyChoice = playerOneChoice;
+                // }
+
+                // console.log("My , Enemy :" + myChoice + enemyChoice);
+
+                io.to(roomId).emit("player-2-wins", choiceObj);
             }
 
             choices[roomId] = ["", ""];
@@ -127,6 +147,8 @@ io.on("connection", socket => {
     });
 
     socket.on("disconnect", () => {
+        console.log("disconnect called...");
+        
         if(connectedUsers[socket.client.id]){
             let player;
             let roomId;
@@ -149,8 +171,12 @@ io.on("connection", socket => {
 
             if(player === 1){
                 io.to(roomId).emit("player-1-disconnected");
+                console.log("p 1 dis");
+                
             }else{
                 io.to(roomId).emit("player-2-disconnected");
+                console.log("p 2 dis");
+                
             }
         }
     })
