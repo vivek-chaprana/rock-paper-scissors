@@ -25,7 +25,8 @@ const App = () => {
   const [playerId, setPlayerId] = useState(0);
 
   const [activeCh, setActiveCh] = useState("");
-  const [message,  setMessage] = useState("");
+  const [message, setMessage] = useState("Make a move.");
+  const [roundNo,setRoundNo] = useState(1);
 
   useEffect(() => {
     socket.on("display-error", (error) => {
@@ -33,7 +34,6 @@ const App = () => {
     });
 
     socket.on("room-created", (id) => {
-      console.log("room-created from app js");
       setInRoom(true);
       setPlayerId(1);
       setRoomId(id);
@@ -65,9 +65,13 @@ const App = () => {
       setWaitMessage(true);
       setmyScorePoints(0);
       setenemyScorePoints(0);
+      setRoundNo(1);
+      
     });
     socket.on("draw", (message) => {
       setWinningMessage(message);
+      setRoundNo(roundNo+1);
+      console.log("Its a Draw.")
     });
 
     socket.on("player-1-wins", (obj) => {
@@ -77,12 +81,14 @@ const App = () => {
         let message = `You choose ${p1Ch} and the enemy choose ${p2Ch} . So you win!`;
         setWinningMessage(message);
         setmyScorePoints(myScorePoints + 1);
-        console.log("You (P1) Won.");
+        console.log("You Won.");
+        setRoundNo(roundNo+1);
       } else {
         let message = `You choose ${p2Ch} and the enemy choose ${p1Ch} . So you lose!`;
         setWinningMessage(message);
         setenemyScorePoints(enemyScorePoints + 1);
-        console.log("You (P2) lost.");
+        console.log("You lost.");
+        setRoundNo(roundNo+1);
       }
     });
 
@@ -93,12 +99,14 @@ const App = () => {
         let message = `You choose ${p2Ch} and the enemy choose ${p1Ch} . So you win!`;
         setWinningMessage(message);
         setmyScorePoints(myScorePoints + 1);
-        console.log("You (P2) Won.");
+        console.log("You Won.");
+        setRoundNo(roundNo+1);
       } else {
         let message = `You choose ${p1Ch} and the enemy choose ${p2Ch} . So you lose!`;
         setWinningMessage(message);
         setenemyScorePoints(enemyScorePoints + 1);
-        console.log("You (P1) lost.");
+        console.log("You lost.");
+        setRoundNo(roundNo+1);
       }
     });
     return () => {
@@ -125,13 +133,7 @@ const App = () => {
   };
 
   const makeMove = (ch) => {
-    console.log(`
-  ${canChoose} : canChooose,
-  ${myChoice} : myChoice,
-  ${playerOneConnected} : playerOneConnected,
-  ${playerTwoIsConnected} : playerTwoIsConnected
-  `);
-  setMessage("Waiting for opponent to make a move ... ")
+    setMessage("Waiting for opponent to make a move ... ");
 
     if (
       canChoose &&
@@ -139,40 +141,38 @@ const App = () => {
       playerOneConnected &&
       playerTwoIsConnected
     ) {
-
       if (ch === 1) {
         setMyChoice("rock");
         setCanChoose(false);
-        setActiveCh("rock")
+        setActiveCh("rock");
         const obj = { playerId, ch, roomId };
         socket.emit("make-move", obj);
       } else if (ch === 2) {
         setMyChoice("paper");
         setCanChoose(false);
-        setActiveCh("paper")
+        setActiveCh("paper");
         const obj = { playerId, ch, roomId };
         socket.emit("make-move", obj);
       } else {
         setMyChoice("scissor");
         setCanChoose(false);
-        setActiveCh("scissor")
+        setActiveCh("scissor");
         const obj = { playerId, ch, roomId };
         socket.emit("make-move", obj);
       }
     }
   };
-  function removeChoice(choice) {
-    console.log("REMOVE CHOICE CALL");
+  function removeChoice() {
     setActiveCh("");
-    setCanChoose(true);
     setMyChoice("");
+    setCanChoose(true);
   }
 
   const setWinningMessage = (message) => {
-    setMessage(message)
+    setMessage(message);
     setTimeout(() => {
-      removeChoice(myChoice);
-      console.log("Removing win message");
+      removeChoice();
+      setWinningMessage("Make a move.");
     }, 5000);
   };
 
@@ -183,8 +183,8 @@ const App = () => {
     setmyScorePoints(0);
     setenemyScorePoints(0);
     setWaitMessage(true);
+    setRoundNo(1);
   };
-  
 
   return (
     <>
@@ -199,7 +199,13 @@ const App = () => {
               </p>
               <div class="spinner-border spinner-border-sm" role="status"></div>
             </div>
-          ) : null}
+          ) : 
+          <div className="text-center">
+            <p className="fs-3 message">
+            Round : {roundNo}
+            </p>
+          </div>
+          }
           <div className="w-75 mx-auto ">
             <div className="connected-players">
               <div className="d-flex justify-content-center">
@@ -213,7 +219,7 @@ const App = () => {
                     role="status"
                   ></div>
                   <span className="ps-2" id="player-1-tag">
-                    {playerId === 1 ? "You (Player 1)" : "Enemy (Player 2)"}
+                    {playerId === 1 ? "You (Player 1)" : "You (Player 2)"}
                   </span>
                 </div>
                 <div className="player ps-3 border-start">
@@ -227,17 +233,21 @@ const App = () => {
                     id="player-2"
                   ></span>
                   <span className="ps-2" id="player-2-tag">
-                    {playerId === 1 ? "Enemy (Player 2)" : "You (Player 1)"}
+                    {playerId === 1 ? "Enemy (Player 2)" : "Enemy (Player 1)"}
                   </span>
                 </div>
               </div>
 
               <div className="score d-flex justify-content-center">
-                <div className="pe-3 border-end">
-                  You : <span id="my-score"> {myScorePoints} </span>
+                <div className="pe-3 border-end ">
+                  You :
+                  <span id="my-score" className="fw-bolder text-primary">
+                    {myScorePoints}
+                  </span>
                 </div>
                 <div className="ps-3 border-start">
-                  Enemy : <span id="enemy-score"> {enemyScorePoints} </span>
+                  Enemy :<span id="enemy-score" className="fw-bolder text-danger">{enemyScorePoints}
+                  </span>
                 </div>
               </div>
             </div>
@@ -245,7 +255,11 @@ const App = () => {
               <div
                 id="rock"
                 className={
-                  (activeCh === "rock") ? "active-rock col text-center" : (activeCh === "" || null || undefined) ? "col text-center" : "col text-center not-active"
+                  activeCh === "rock"
+                    ? "active-rock col text-center"
+                    : activeCh === "" || null || undefined
+                    ? "col text-center"
+                    : "col text-center not-active"
                 }
                 onClick={() => makeMove(1)}
               >
@@ -257,7 +271,11 @@ const App = () => {
               <div
                 id="paper"
                 className={
-                  (activeCh === "paper") ? "active-paper col text-center" : (activeCh === "" || null || undefined) ? "col text-center" : "col text-center not-active"
+                  activeCh === "paper"
+                    ? "active-paper col text-center"
+                    : activeCh === "" || null || undefined
+                    ? "col text-center"
+                    : "col text-center not-active"
                 }
                 onClick={() => makeMove(2)}
               >
@@ -269,7 +287,11 @@ const App = () => {
               <div
                 id="scissors"
                 className={
-                  (activeCh === "scissor") ? "active-scissor col text-center" : (activeCh === "" || null || undefined) ? "col text-center" : "col text-center not-active"
+                  activeCh === "scissor"
+                    ? "active-scissor col text-center"
+                    : activeCh === "" || null || undefined
+                    ? "col text-center"
+                    : "col text-center not-active"
                 }
                 onClick={() => makeMove(3)}
               >
@@ -279,13 +301,13 @@ const App = () => {
                 <p className="fw-bolder">SCISSORS</p>
               </div>
             </div>
-            {
-              (message === "" || null || undefined || false )? null :
-            <div className="py-4 message text-center w-100">
-             <p className="fw-normal fs-5">{message}</p> 
-            </div>
-            }
+            {(!waitMessage) ?  (
+              <div className="py-4 message text-center w-100 ">
+                <p className="fw-bolder fs-5">{message}</p>
+              </div>
+            ): null}
           </div>
+          <Footer />
         </div>
       ) : (
         <div className="start-screen bg-light">
@@ -409,11 +431,12 @@ const App = () => {
             )}
           </div>
           <div className="msg text-center mt-2 mb-4">
-            <p className="fs-4 fw-normal ">
+            <p className="fs-4 fw-normal message">
               Join or Create a Room to play the game.
             </p>
           </div>
           <Rules />
+          <Footer />
         </div>
       )}
     </>
@@ -441,10 +464,10 @@ const Rules = () => {
           power and will lead to an outcome.
         </p>
       </div>
-      <div className="fw-bolder fs-5">
+      <div className="fw-bolder ms-2 fs-5">
         What are the shapes of Rock Paper Scissors?
       </div>
-      <div className="row text-center">
+      <div className="row text-center ms-2">
         <div className="col">
           <div className="">
             <img
@@ -516,6 +539,23 @@ const Rules = () => {
         </ul>
       </div>
     </div>
+  );
+};
+const Footer = () => {
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="py-3 bg-light w-100  mt-5 text-center border message">
+      Copyright © {year} -{" "}
+      <a href="https://vivekchaprana.netlify.app" target="__blank">
+        Vivek Chaprana
+      </a>
+      . Any suggestions to site, feel free to make a pull request on{" "}
+      <a href="https://github.com/vivek-chaprana/React-rps" target="__blank">
+        Github
+      </a>{" "}
+      .
+    </footer>
   );
 };
 

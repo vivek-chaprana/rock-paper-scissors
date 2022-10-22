@@ -1,10 +1,7 @@
-.connected {
-  min-width: 5px;
-  background-color: red;
-}
+@import url('https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap');
+
 .main-heading {
   font-family: "Anurati Regular";
-  /* text-transform: uppercase; */
 }
 
 @keyframes blink {
@@ -68,4 +65,17 @@
 }
 .active-scissor p {
   color: #40dcff;
+}
+a{
+  text-decoration: none;
+  color: inherit;
+  opacity: .7;
+}
+a:hover{
+  opacity: 1;
+  text-decoration: underline;
+  color: black;
+}
+.message{
+  font-family: 'ZCOOL XiaoWei', serif !important;
 }

@@ -29,14 +29,12 @@ io.on("connection", socket => {
         if(rooms[roomId]){
             const error = "This room already exists";
             socket.emit("display-error", error);
-            console.log("room creation failed bruh")
         }else{
             userConnected(socket.client.id);
             createRoom(roomId, socket.client.id);
             socket.emit("room-created", roomId);
             socket.emit("player-1-connected");
             socket.join(roomId);
-            console.log("room created bruh")
         }
     })
 
@@ -44,7 +42,6 @@ io.on("connection", socket => {
         if(!rooms[roomId]){
             const error = "This room doesn't exist";
             socket.emit("display-error", error);
-            console.log("Room joined failed");
             
         }else{
             userConnected(socket.client.id);
@@ -55,7 +52,6 @@ io.on("connection", socket => {
             socket.emit("player-2-connected");
             socket.broadcast.to(roomId).emit("player-2-connected");
             initializeChoices(roomId);
-            console.log("Room joined bruh");
             
         }
     })
@@ -73,7 +69,6 @@ io.on("connection", socket => {
         if(roomId === ""){
             const error = "All rooms are full or none exists";
             socket.emit("display-error", error);
-            console.log("All rooms full");
             
         }else{
             userConnected(socket.client.id);
@@ -84,7 +79,6 @@ io.on("connection", socket => {
             socket.emit("player-2-connected");
             socket.broadcast.to(roomId).emit("player-2-connected");
             initializeChoices(roomId);
-            console.log("Random room joined");
             
         }
     });
@@ -104,51 +98,17 @@ io.on("connection", socket => {
                 io.to(roomId).emit("draw", message);
                 
             }else if(moves[playerOneChoice] === playerTwoChoice){
-                console.log("p1 jeet raha hai");
-
-                console.log(playerId);
-                
                 const choiceObj = {playerOneChoice,playerTwoChoice};
-
-                // if(playerId === 1){
-                //     enemyChoice = playerTwoChoice;
-                // }else{
-                //     enemyChoice = playerOneChoice;
-                // }
-                // console.log("My , Enemy :" + myChoice + enemyChoice);
-                console.log(choiceObj);
-                
-
                 io.to(roomId).emit("player-1-wins", choiceObj);
             }else{
-                console.log("p2 jeet raha hai");
-                console.log(playerId);
                 const choiceObj = {playerOneChoice,playerTwoChoice};
-                console.log(choiceObj);
-
-
-                
-                
-                // let enemyChoice = "";
-
-                // if(playerId === 1){
-                //     enemyChoice = playerTwoChoice;
-                // }else{
-                //     enemyChoice = playerOneChoice;
-                // }
-
-                // console.log("My , Enemy :" + myChoice + enemyChoice);
-
                 io.to(roomId).emit("player-2-wins", choiceObj);
             }
-
             choices[roomId] = ["", ""];
         }
     });
 
     socket.on("disconnect", () => {
-        console.log("disconnect called...");
-        
         if(connectedUsers[socket.client.id]){
             let player;
             let roomId;
@@ -171,12 +131,8 @@ io.on("connection", socket => {
 
             if(player === 1){
                 io.to(roomId).emit("player-1-disconnected");
-                console.log("p 1 dis");
-                
             }else{
                 io.to(roomId).emit("player-2-disconnected");
-                console.log("p 2 dis");
-                
             }
         }
     })
