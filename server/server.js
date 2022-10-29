@@ -1,22 +1,23 @@
 const express = require("express");
 const http = require("http");
-const {Server} = require("socket.io");
+const socketIO = require("socket.io");
 const cors = require("cors")
 
 const app = express();
-const port = 5000;
+const port= process.env.PORT ;
 
-app.use(cors())
+app.use(cors());
+
+app.get("/",(req,res)=>{
+    res.send("Hello Fraands Chai Pee Loo !");
+})
 
 const server = http.createServer(app);
 
 
 
-const io = new Server(server, {
-    cors : {
-        origin : "http://localhost:3000", 
-    }
-})
+const io=socketIO(server);
+
 
 
 const {userConnected, connectedUsers, initializeChoices, moves, makeMove, choices} = require("./utils/users");

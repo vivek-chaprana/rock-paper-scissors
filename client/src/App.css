@@ -79,3 +79,15 @@ a:hover{
 .message{
   font-family: 'ZCOOL XiaoWei', serif !important;
 }
+
+@media (max-width: 500px){
+  .outerRules{
+    flex-direction: column;
+
+  }
+  .img-and-text{
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+  }
+}

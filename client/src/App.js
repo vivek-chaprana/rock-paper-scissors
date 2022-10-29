@@ -251,7 +251,7 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div className="choices row mt-5">
+            <div className="choices d-flex justify-content-center gap-3 mt-5">
               <div
                 id="rock"
                 className={
@@ -263,8 +263,8 @@ const App = () => {
                 }
                 onClick={() => makeMove(1)}
               >
-                <div className="p-3 rounded-circle border">
-                  <img src={Rock} alt="rock" />
+                <div className="p-3 rounded-circle border image">
+                  <img src={Rock} alt="rock" className="img-fluid"  />
                 </div>
                 <p className="fw-bolder">ROCK</p>
               </div>
@@ -279,8 +279,8 @@ const App = () => {
                 }
                 onClick={() => makeMove(2)}
               >
-                <div className="p-3 rounded-circle border">
-                  <img className="" src={Paper} alt="paper" />
+                <div className="p-3 rounded-circle border image">
+                  <img src={Paper} alt="paper" className="img-fluid"  />
                 </div>
                 <p className="fw-bolder">PAPER</p>
               </div>
@@ -296,7 +296,7 @@ const App = () => {
                 onClick={() => makeMove(3)}
               >
                 <div className="p-3 rounded-circle border">
-                  <img src={Scissors} alt="scissors" />
+                  <img src={Scissors} alt="scissors" className="img-fluid"  />
                 </div>
                 <p className="fw-bolder">SCISSORS</p>
               </div>
@@ -467,42 +467,42 @@ const Rules = () => {
       <div className="fw-bolder ms-2 fs-5">
         What are the shapes of Rock Paper Scissors?
       </div>
-      <div className="row text-center ms-2">
-        <div className="col">
-          <div className="">
+      <div className="d-flex outerRules text-center ms-2">
+        <div className="col img-and-text ">
+          <div className="image">
             <img
               src={Rock}
               alt="rock"
               className="img-thumbnail rounded p-2 bg-transparent"
             />
-          </div>
           <p className="fw-bolder">ROCK</p>
+          </div>
           <p>
             The rock is when you place your hand into the form of a simple fist.
           </p>
         </div>
-        <div className="col">
-          <div className="">
+        <div className="col img-and-text ">
+          <div className="image">
             <img
               src={Paper}
               alt="paper"
               className="img-thumbnail rounded p-2 bg-transparent"
             />
-          </div>
           <p className="fw-bolder">PAPER</p>
+          </div>
           <p>
             The paper is when you place your hand in an outstretched position.
           </p>
         </div>
-        <div className="col">
-          <div className="">
+        <div className="col img-and-text ">
+          <div className="image">
             <img
               src={Scissors}
               alt="scissors"
               className="img-thumbnail rounded p-2 bg-transparent"
             />
-          </div>
           <p className="fw-bolder">SICSSORS</p>
+          </div>
           <p>
             This is when you hold your fist with your index and middle finger
             pointing outwards in a V shape.
