@@ -81,6 +81,12 @@ a:hover{
 }
 
 @media (max-width: 500px){
+  .message{
+    min-height: 15vh;
+  }
+  .fill-box{
+    min-height: 15vh;
+  }
   .outerRules{
     flex-direction: column;
 
@@ -89,5 +95,23 @@ a:hover{
     display: flex !important;
     justify-content: center;
     align-items: center;
+  }
+  #rock:hover div {
+    border: 0;
+  }
+  #rock:hover p {
+    color: black;
+  }
+  #scissors:hover div {
+    border: 0;
+  }
+  #scissors:hover p {
+    color: black;
+  }
+  #paper:hover div {
+    border: 0;
+  }
+  #paper:hover p {
+    color: black;
   }
 }

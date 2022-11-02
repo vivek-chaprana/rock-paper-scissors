@@ -70,8 +70,7 @@ const App = () => {
     });
     socket.on("draw", (message) => {
       setWinningMessage(message);
-      setRoundNo(roundNo+1);
-      console.log("Its a Draw.")
+      console.log("Its a Draw.");
     });
 
     socket.on("player-1-wins", (obj) => {
@@ -82,14 +81,15 @@ const App = () => {
         setWinningMessage(message);
         setmyScorePoints(myScorePoints + 1);
         console.log("You Won.");
-        setRoundNo(roundNo+1);
+
       } else {
         let message = `You choose ${p2Ch} and the enemy choose ${p1Ch} . So you lose!`;
         setWinningMessage(message);
         setenemyScorePoints(enemyScorePoints + 1);
         console.log("You lost.");
-        setRoundNo(roundNo+1);
+
       }
+
     });
 
     socket.on("player-2-wins", (obj) => {
@@ -100,14 +100,15 @@ const App = () => {
         setWinningMessage(message);
         setmyScorePoints(myScorePoints + 1);
         console.log("You Won.");
-        setRoundNo(roundNo+1);
+
       } else {
         let message = `You choose ${p1Ch} and the enemy choose ${p2Ch} . So you lose!`;
         setWinningMessage(message);
         setenemyScorePoints(enemyScorePoints + 1);
         console.log("You lost.");
-        setRoundNo(roundNo+1);
+
       }
+
     });
     return () => {
       socket.off("display-error");
@@ -122,6 +123,22 @@ const App = () => {
       socket.off("player-2-wins");
     };
   });
+      const countDown =  () => {
+        let sec = 6;
+        setInterval(()=>{
+          sec = sec-1;
+          if(sec>0){
+            setMessage(`Next round in ${sec} seconds.`);
+          }
+          if(sec === 0){            
+            setRoundNo(roundNo+1);
+            removeChoice();
+            setMessage("Make a move.");
+          }
+
+          },1000)
+      }
+      
 
   const createRoomClicked = () => {
     setCreateRoom(!createRoom);
@@ -133,14 +150,13 @@ const App = () => {
   };
 
   const makeMove = (ch) => {
-    setMessage("Waiting for opponent to make a move ... ");
-
     if (
       canChoose &&
       myChoice === "" &&
       playerOneConnected &&
       playerTwoIsConnected
     ) {
+      setMessage("Waiting for opponent to make a move ... ");
       if (ch === 1) {
         setMyChoice("rock");
         setCanChoose(false);
@@ -171,8 +187,7 @@ const App = () => {
   const setWinningMessage = (message) => {
     setMessage(message);
     setTimeout(() => {
-      removeChoice();
-      setWinningMessage("Make a move.");
+      countDown();
     }, 5000);
   };
 
@@ -197,7 +212,7 @@ const App = () => {
               <p className="fs-6 text-black fade-in">
                 Waiting for another player to join...
               </p>
-              <div class="spinner-border spinner-border-sm" role="status"></div>
+              <div className="spinner-border spinner-border-sm" role="status"></div>
             </div>
           ) : 
           <div className="text-center">
@@ -241,12 +256,12 @@ const App = () => {
               <div className="score d-flex justify-content-center">
                 <div className="pe-3 border-end ">
                   You :
-                  <span id="my-score" className="fw-bolder text-primary">
+                  <span id="my-score" className="fw-bolder text-primary ps-1">
                     {myScorePoints}
                   </span>
                 </div>
                 <div className="ps-3 border-start">
-                  Enemy :<span id="enemy-score" className="fw-bolder text-danger">{enemyScorePoints}
+                  Enemy :<span id="enemy-score" className="fw-bolder text-danger ps-1">{enemyScorePoints}
                   </span>
                 </div>
               </div>
@@ -305,7 +320,7 @@ const App = () => {
               <div className="py-4 message text-center w-100 ">
                 <p className="fw-bolder fs-5">{message}</p>
               </div>
-            ): null}
+            ): <div className="fill-box bg-light"></div> }
           </div>
           <Footer />
         </div>
