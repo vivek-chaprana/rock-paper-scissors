@@ -124,7 +124,7 @@ const App = () => {
     };
   });
       const countDown =  () => {
-        let sec = 6;
+        let sec = 4;
         setInterval(()=>{
           sec = sec-1;
           if(sec>0){
@@ -135,7 +135,6 @@ const App = () => {
             removeChoice();
             setMessage("Make a move.");
           }
-
           },1000)
       }
       
@@ -188,7 +187,7 @@ const App = () => {
     setMessage(message);
     setTimeout(() => {
       countDown();
-    }, 5000);
+    }, 3000);
   };
 
   const reset = () => {
